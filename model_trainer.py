@@ -13,10 +13,8 @@ physical_devices = tf.config.experimental.list_physical_devices('GPU')
 for physical_device in physical_devices: 
     tf.config.experimental.set_memory_growth(physical_device, True)
 
-consider_labels = {'aniston', 'clooney', 'dakshit', 'eshana', 'gore', 'gul', 'jim', 'kaley', 'keanu', 'paramvir', 'salma', 'saumya', 'sharpton', 'snow'}
-
 if __name__=='__main__':
-    image_data = load_data("./dataset", consider_labels)
+    image_data = load_data("./dataset")
 
     save_every = 200
     print_every = 20
