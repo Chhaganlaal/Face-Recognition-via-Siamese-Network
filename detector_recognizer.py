@@ -19,7 +19,7 @@ def recognize_video(fr_model, encodings, video_path=0):
     cap = cv2.VideoCapture(video_path)
 
     if not cap.isOpened():
-        print("Error opening camera")
+        print(("Error opening camera" if video_path==0 else "Error opening video file"))
 
     while cap.isOpened():
 
@@ -34,7 +34,7 @@ def recognize_video(fr_model, encodings, video_path=0):
                 face_section = frame[y-offset: y+h+offset, x-offset: x+w+offset]
                 face_section = custom_resize(face_section, (96, 96))
 
-                prediction = model.recognize(fr_model, encodings, face_section)
+                prediction = fr_model.recognize(encodings, face_section)
 
                 draw_on_image(frame, prediction, face)
 
@@ -56,7 +56,7 @@ def recognize_image(fr_model, encodings, image_path):
         face_section = image[y-offset: y+h+offset, x-offset: x+w+offset]
         face_section = custom_resize(face_section, (96, 96))
 
-        prediction = model.recognize(fr_model, encodings, face_section)
+        prediction = fr_model.recognize(encodings, face_section)
 
         draw_on_image(image, prediction, face)
 
@@ -67,11 +67,11 @@ def recognize_image(fr_model, encodings, image_path):
     cv2.imwrite("out.jpg", image)
 
 if __name__=='__main__':
-    fr_model = model.inception_model(tf.keras.layers.Input((96, 96, 3)), 'name')
+    fr_model = model.fr_model((96, 96, 3), 'fr_model')
     fr_model.load_weights(os.path.join('./weights', 'weights_2000.h5'))
     # fr_model.summary()
 
-    test_img = cv2.imread('./dataset/na/11.jpg')
+    test_img = cv2.imread('./sample.jpg')
     test_img = custom_resize(test_img, (96, 96))
 
     predicted = None
@@ -85,4 +85,4 @@ if __name__=='__main__':
 
     # print("Predicted : ", predicted, "(", best, ")")
 
-    recognize_image(fr_model, encodings, './sample.jpg')
+    recognize_video(fr_model, encodings)
